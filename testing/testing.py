@@ -17,29 +17,24 @@ def test_eval(y_pred, y_test, x_test, eval_size, show_img=False):
 
     for i in rand_num:
 
-        # ---------- Binarizacion de la prediccion -------------
+        # Prediction Binzarization 
         y_pred1 = y_pred[i]
         y_pred1 = y_pred1[:, :, 0].astype('uint8')
-
-        # Binarizacion Otsu
-
         th, y_pred1 = cv2.threshold(y_pred1, 2, 1, cv2.THRESH_OTSU)
-
         y_pred1 = y_pred1.astype('float32')
         y_pred1 = np.expand_dims(y_pred1, axis=2)
-        # ---------- Binarizacion del label -------------
 
+        # Label Binarization
         y_true = y_test[i]
         y_true = y_true[:, :, 0].astype('uint8')
         y_true = np.expand_dims(y_true, axis=2)
-        # Binarizacion otsu
         th, y_true = cv2.threshold(y_true, 2, 1, cv2.THRESH_OTSU)
         y_true = y_true.astype('float32')
 
-        if show_img:
 
+        # Image visualization.
+        if show_img:
             disp_img = x_test[i]
-            # disp_img = disp_img[:,:,0]
 
             display_list = [disp_img, y_true, y_pred1]
             title = ['Input Image', 'Ground Truth', 'Predicted Image']
@@ -81,7 +76,7 @@ def ripple_metrics(ground_t, img_prediction):
   FP = 0
   FN = 0
 
-  # Creacion de la matriz de confusion
+  # Confusion matrix
   for i in range(0, len(label)):
     if (label[i] == 1 and label_pred[i] == 1):
       TP = TP + 1

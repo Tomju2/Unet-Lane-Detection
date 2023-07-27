@@ -27,64 +27,49 @@ def read_files(path):
 
 def detect_colors(arr1,tol):
 
-    # confirmamos que los arreglios sean del mismo tamaño
-    ''''''''''
-    if (len(arr1) != 3):
-        print('No es un arreglo valido')
-        return None
-    '''
+    # Process array
     max_num = np.max(arr1)
 
-    # Separamos los valores del arreglo
     num_1 = arr1[0]
     num_2 = arr1[1]
     num_3 = arr1[2]
 
-
-
-    # Obtenemos la comparacion entre ellos
+    # Comparison
     val_1 = np.isclose(num_1, max_num, atol=tol)
     val_2 = np.isclose(num_2, max_num, atol=tol)
     val_3 = np.isclose(num_3, max_num, atol=tol)
-
     color_lane = [val_1, val_2 , val_3]
 
     color_eval = [[False, False, True], [False, True, False], [True, False, False], [False, True, True], [True, True, True]]
-    color_name = ['azul','verde','rojo','amarillo','blanco']
+    color_name = ['blue','green','red','yellow','white']
 
     for i in range(len(color_eval)):
 
         if color_eval[i] == color_lane:
             color_value = color_name[i]
 
-            if color_value == None:
-                print('ah caray')
-
             return color_value
 
-def obtener_carriles(img):
-
+def get_lanes(img):
 
     vals = np.unique(img)
-    # Ajustando los valores:
+    # Binarization
     img[img > 200] = 255
     img[img < 100] = 0
 
-
-
-    # Declracion de los carriles.
+    # Lane declaration
     color_rojo = []
     color_azul = []
     color_verde = []
     color_amarillo = []
     color_blanco = []
 
-    # Loop principal para recorrer la imagen verticalmente y luego horizontal buscando los carrles.
+    # Search in the entire image.
     for i in range(160,720,10):
         #print('--------',i,'--------')
 
-        color_coordenada = [] # Almacena el color de carril
-        color_name = ['azul','verde','rojo','amarillo','blanco']
+        color_coordenada = [] # Color of the lane.
+        color_name = ['blue','green','red','yellow','white']
 
         for j in range(1280):
             valores = img[i][j]
@@ -106,38 +91,37 @@ def obtener_carriles(img):
                     color_name.remove(color)
                     color_coordenada.append(color)
 
-                    if color == 'azul':
+                    if color == 'blue':
                         color_azul.append(j)
 
-                    if color == 'rojo':
+                    if color == 'red':
                         color_rojo.append(j)
 
-                    if color == 'amarillo':
+                    if color == 'yellow':
                         color_amarillo.append(j)
 
-                    if color == 'verde':
+                    if color == 'green':
                         color_verde.append(j)
 
-                    if color == 'blanco':
+                    if color == 'white':
                         color_blanco.append(j)
 
-                #print((color), (i, j))
 
         for color_falt in color_name:
 
-            if color_falt == 'azul':
+            if color_falt == 'blue':
                 color_azul.append(-2)
 
-            if color_falt == 'rojo':
+            if color_falt == 'red':
                 color_rojo.append(-2)
 
-            if color_falt == 'amarillo':
+            if color_falt == 'yellow':
                 color_amarillo.append(-2)
 
-            if color_falt == 'verde':
+            if color_falt == 'green':
                 color_verde.append(-2)
 
-            if color_falt == 'blanco':
+            if color_falt == 'white':
                 color_blanco.append(-2)
 
     while len(color_rojo) > 56:
@@ -152,21 +136,17 @@ def obtener_carriles(img):
 def createJson(path_img,json_path):
     # Data to be written
     hsamples = [160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 510, 520, 530, 540, 550, 560, 570, 580, 590, 600, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700, 710]
-
-    # Datos
-    path_img = r'D:\Maestria\Checkpoint\prediccion_color_skeleton\\'
-
+ 
     list_files, name_files = read_files(path_img)
 
     dim = (1280,720)
 
     for i in tqdm(range(len(list_files))):
-        # Cargar imagen
+    
         img = cv2.imread(list_files[i])
-        #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img,dim, interpolation = cv2.INTER_AREA)
 
-        carr_1 , carr_2 , carr_3 , carr_4, carr_5 = obtener_carriles(img)
+        carr_1 , carr_2 , carr_3 , carr_4, carr_5 = get_lanes(img)
 
         carr_total = []
 
@@ -185,7 +165,7 @@ def createJson(path_img,json_path):
         if len(np.unique(carr_5)) != 1:
             carr_total.append(carr_5)
 
-        # Quitar el .jpg duplicado de los nombres
+        # remove extra .jpg
         old_str = name_files[i]
         new_str = old_str[:-4]
 

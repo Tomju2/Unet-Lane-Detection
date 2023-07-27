@@ -25,7 +25,16 @@ def read_files(path):
   return list_files, name_files
 
 def load_imgs (img_size,img_path,img_color = False):
+  """Loads and pre-process images to the model
 
+  Args:
+      img_size (int): size of the image to process
+      img_path (str): path where the images are
+      img_color (bool, optional): True for color images, false for b/w images. Defaults to False.
+
+  Returns:
+      _type_: _description_
+  """
   if not img_color:
     img_channel = 1
   else:

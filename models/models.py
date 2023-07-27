@@ -89,8 +89,6 @@ class Unet_models(object):
 
         weight=38
         nb_filter = [weight,weight*2,weight*4,weight*8,weight*16]
-
-        #inputs = Input((img_rows, img_cols, 1))
         inputs = Input(shape=x_train.shape[1:])
         conv1 = Conv2D(nb_filter[0], (3, 3), activation='relu', padding='same')(inputs)
         conv1 = Conv2D(nb_filter[0], (3, 3), activation='relu', padding='same')(conv1)
@@ -140,7 +138,6 @@ class Unet_models(object):
     def get_cio_unet(self,size = 256,input_channel = 3):
 
       inputs = Input((size , size , input_channel))
-      # s = Lambda(lambda x: x / 255) (inputs)
       conv1 = Conv2D(16, (3, 3), activation='elu', kernel_initializer='he_normal', padding='same') (inputs)
       conv1 = BatchNormalization() (conv1)
       conv1 = Dropout(0.1) (conv1)
@@ -170,7 +167,6 @@ class Unet_models(object):
       conv5 = Dropout(0.3) (conv5)
       conv5 = Conv2D(256, (3, 3), activation='elu', kernel_initializer='he_normal', padding='same') (conv5)
       conv5 = BatchNormalization() (conv5)
-      ####################################################################################################################################################################
       upsample6 = Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same') (conv5)
       upsample6 = concatenate([upsample6, conv4])
       conv6 = Conv2D(128, (3, 3), activation='elu', kernel_initializer='he_normal', padding='same') (upsample6)
@@ -193,12 +189,6 @@ class Unet_models(object):
       conv8 = Conv2D(32, (3, 3), activation='elu', kernel_initializer='he_normal', padding='same') (conv8)
       conv8 = BatchNormalization() (conv8)
       upsample9 = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same') (conv8)
-      ###################################################################################
-      # upsample_conv2 = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same') (conv2)
-      # upsample_conv3 = Conv2DTranspose(16, (2, 2), strides=(4, 4), padding='same') (conv3)
-      # upsample_conv4 = Conv2DTranspose(16, (2, 2), strides=(8, 8), padding='same') (conv4)
-      # upsample_conv5 = Conv2DTranspose(16, (2, 2), strides=(16, 16), padding='same') (conv5)
-      ###################################################################################
       upsample9 = concatenate([upsample9, conv1], axis=3)
       conv9 = Conv2D(16, (3, 3), activation='elu', kernel_initializer='he_normal', padding='same') (upsample9)
       conv9 = BatchNormalization() (conv9)
@@ -219,8 +209,6 @@ class Unet_models(object):
         bn_axis = 1
 
         img_input = Input(shape=(img_rows, img_cols, color_type), name='main_input')
-        # img_input = Input(shape=x_train.shape[1:])
-
         conv1_1 = Conv2D(nb_filter[0], (3, 3), activation='relu', padding='same')(
             img_input)
         conv1_1 = Conv2D(nb_filter[0], (3, 3), activation='relu', padding='same')(
@@ -295,8 +283,6 @@ class Unet_models(object):
             conv1_4)
         conv1_4 = Conv2D(nb_filter[0], (3, 3), activation='relu', padding='same')(
             conv1_4)
-
-        #     conv5_1 = standard_unit(pool4, stage='51', nb_filter=nb_filter[4])
         conv5_1 = Conv2D(nb_filter[4], (3, 3), activation='relu', padding='same')(
             pool4)
         conv5_1 = Conv2D(nb_filter[4], (3, 3), activation='relu', padding='same')(
