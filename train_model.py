@@ -6,7 +6,6 @@ import sys
 # import U-net and loss functions
 from models.loss_functions import *
 from models.models import *
-import visualkeras
 
 s = Semantic_loss_functions()
 m = Unet_models()
