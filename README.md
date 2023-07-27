@@ -49,7 +49,7 @@ IoU
 Dice coefficient.
 </p>
 <p align="center">
-<img width="48%" height="48%" src="img/Dice.PNG">
+<img width="48%" height="48%" src="img/Dice.png">
 </p>
 
 ### Tusimple metrics
@@ -98,7 +98,7 @@ Some results of the test images can be seen below.
 </p>
 
 <p align="center">
-<img width="70%" height="70%" src="img/results.png">  
+<img width="70%" height="70%" src="img/Results.png">  
 </p>
 
 <p align="center">
