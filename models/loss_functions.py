@@ -3,34 +3,26 @@ import keras.backend as K
 from keras.losses import binary_crossentropy
 import cv2
 
+
+# constant declaration for losses
 beta = 0.25
 alpha = 0.25
 gamma = 2
 epsilon = 1e-5
 smooth = 1
 
-
-
-
 class Semantic_loss_functions(object):
+    """Loss functions for the models includes:
+    dice loss, focal loss, dice loss with L1
+    binary cross entropy,tversky loss, focal tversky,
+    and focal_tversky with L1 or L2.
+    
+
+    Args:
+        object (_type_): _description_
+    """
     def __init__(self):
         print ("semantic loss functions initialized")
-    '''''
-    def binarize_img(self, y_true, y_pred):
-        # Binrization of the ground truth
-        y_true = y_true * 100
-        y_true = y_true.astype('uint8')
-        y_true = cv2.cvtColor(y_true, cv2.COLOR_BGR2GRAY)
-        th, y_true = cv2.threshold(y_true, 10, 1, cv2.THRESH_BINARY)
-
-        # Binrization of the prediction
-        y_pred = y_pred * 100
-        y_pred = y_pred.astype('uint8')
-        y_pred = cv2.cvtColor(y_pred, cv2.COLOR_BGR2GRAY)
-        th, y_pred = cv2.threshold(y_pred, 10, 1, cv2.THRESH_BINARY)
-
-        return y_true, y_pred
-    '''
     def dice_coef(self, y_true, y_pred):
         y_true_f = K.flatten(y_true)
         y_pred_f = K.flatten(y_pred)

@@ -1,8 +1,8 @@
 from keras.callbacks import *
 from Utils.utilities import load_imgs
-from monogenic.visual_stepbystep import apply_monogenic
 from tqdm import tqdm
 import sys
+
 # import U-net and loss functions
 from models.loss_functions import *
 from models.models import *
@@ -27,30 +27,7 @@ x_test, y_test,test_names = load_imgs(img_size, test_path,img_color=False)
 
 x_test = x_test[0:900]
 y_test = y_test[0:900]
-'''''''''
-# apply monogenic transformation
-x_train_mono = np.empty((len(x_train), img_size, img_size,2), dtype=np.float32)
-for i in tqdm(range(len(x_train))):
 
-    img = x_train[i]
-    monogenic_img = apply_monogenic(img,img_size)
-    x_train[i] = 0
-
-    concat_img = np.concatenate((img, monogenic_img), axis=-1)
-    x_train_mono[i] = concat_img
-
-x_test_mono = np.empty((len(x_test), img_size, img_size,2), dtype=np.float32)
-for i in tqdm(range(len(x_test))):
-
-    img = x_test[i]
-
-    monogenic_img = apply_monogenic(img,img_size)
-    x_test[i] = 0
-    x_test_mono[i] = np.concatenate((img, monogenic_img), axis=-1)
-    #x_test_mono[i] = monogenic_img
-
-tf.keras.backend.clear_session()
-'''''
 # ---------- Create the model ---------------------
 
 # Define image generator
@@ -84,19 +61,15 @@ es = tf.keras.callbacks.EarlyStopping(
     verbose = 2,
     restore_best_weights=True)
 
-# Variables
+
 epochs = 150
 batch_size = 32
-
-
-# Train model
 hist = model.fit(my_generator(x_train, y_train,batch_size=batch_size),
                            steps_per_epoch=40,
                            validation_data=(x_test, y_test),
                            epochs=epochs, verbose=1,
                            callbacks=[learning_rate_reduction,es])
 
-# Save model
 model.save('D:\Maestria\Checkpoint\modelo_unet_log_cosh_dice_loss_l1_1ch_256_monog_test.h5')
 
 sys.exit()
