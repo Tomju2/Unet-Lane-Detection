@@ -2,22 +2,45 @@ from keras.callbacks import *
 from Utils.utilities import load_imgs
 from tqdm import tqdm
 import sys
-
-# import U-net and loss functions
+import argparse
+from pathlib import Path
+from loguru import logger
 from models.loss_functions import *
 from models.models import *
+
+
+# Define the paths
+
+parser = argparse.ArgumentParser()
+parser.add_argument("train_img_path")
+parser.add_argument("test_img_path")
+parser.add_argument("output_path")
+args = parser.parse_args()
+
+
+train_path = Path(args.train_img_path)
+if not train_path.exists():
+    logger.error("The train img path dosen't exist")
+    raise SystemExit(1)
+
+test_path = Path(args.test_img_path)
+if not test_path.exists():
+    logger.error("The test img path dosen't exist")
+    raise SystemExit(1)
+
+output_path = Path(args.test_img_path)
+if not output_path.exists():
+    logger.error("The output path dosen't exist")
+    raise SystemExit(1)
+
+# import U-net and loss functions
 
 s = Semantic_loss_functions()
 m = Unet_models()
 
-# -----------Load the dataset-----------------
 
-# Define the size of the images
+# Load the dataset
 img_size = 256
-
-# Define the paths
-train_path = 'D:\Maestria\Investigacion\Datasets\TuSimple\\512x512c\\Training'
-test_path = 'D:\Maestria\Investigacion\Datasets\TuSimple\\512x512c\\test'
 
 # Load the images
 x_train, y_train , train_names = load_imgs(img_size, train_path,img_color=False)
@@ -69,6 +92,6 @@ hist = model.fit(my_generator(x_train, y_train,batch_size=batch_size),
                            epochs=epochs, verbose=1,
                            callbacks=[learning_rate_reduction,es])
 
-model.save('D:\Maestria\Checkpoint\modelo_unet_log_cosh_dice_loss_l1_1ch_256_monog_test.h5')
+model.save(output_path)
 
 sys.exit()
