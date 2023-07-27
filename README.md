@@ -54,7 +54,7 @@ Dice coefficient.
 
 ### Tusimple metrics
 
-It also has an implementation of the Tusimple official metrics under _TuSumple_testing_ in the file _TuSimple_test_ the usage for this is the following:
+It also has an implementation of the Tusimple official metrics under _TuSimple_testing_ in the file _TuSimple_test_ the usage for this is the following:
 
 ```python
 python .//TuSimple_testing//Tusimple_test.py path_data path_pred save_path pred_json_path test_json_path
@@ -62,12 +62,12 @@ python .//TuSimple_testing//Tusimple_test.py path_data path_pred save_path pred_
 
 The documentation for the arguments are:
 
-* img_size (int): size of the images
-* path_data (string): label images path
-* path_pred (string): inference images from the model
-* save_path (string): where the processed images will be saved
+* img_size (int): Size of the images
+* path_data (string): Label images path
+* path_pred (string): Inference images from the model
+* save_path (string): Where the processed images will be saved
 * pred_json_path (string): Path where the json will be saved
-* test_json_path (string): path of the official tusimple jsons
+* test_json_path (string): Path of the official tusimple jsons
 
 ## Usage
 
