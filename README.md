@@ -89,7 +89,7 @@ where:
 * save_path: Path where the output images will be saved
 * model_path: Path to the trained model
 
-### Results
+## Results
 
 Some results of the test images can be seen below.
 
@@ -107,3 +107,7 @@ Some results of the test images can be seen below.
 <p align="center">
 <img width="70%" height="70%" src="img/3chanel.png">
 </p>
+
+## Python env
+
+The python version used was 3.9.17.
